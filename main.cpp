@@ -7,7 +7,10 @@
 
 void adminCheck();
 void createReportCard();
-void allStudentsReportCard();
+void readAllStudentsReportCard();
+void adminMenu();
+void modifyReportCard();
+
 
 class admin{
     public:
@@ -75,8 +78,14 @@ void adminCheck(){
     std::cout << "Enter password: ";
     std::cin >> password;
 
-    if((Admin.userCheck(username) && Admin.paswrdCheck(password)) == true){
-        LOG("====================");
+    if((Admin.userCheck(username) && Admin.paswrdCheck(password)) == true)
+       adminMenu();        
+
+}
+
+void adminMenu(){
+    int input{0};
+    LOG("====================");
         LOG("1-Create student report card record");
         LOG("2-Read all students report card record");
         LOG("3-Read specific student’s report card record");
@@ -93,7 +102,7 @@ void adminCheck(){
             createReportCard();
             break;
         case 2:
-            allStudentsReportCard();
+            readAllStudentsReportCard();
             break;
         case 3:
             /* code */
@@ -115,13 +124,10 @@ void adminCheck(){
             break;
         }
     }
-        
-
-}
 
 void createReportCard(){
     std::string studentName;
-    
+    int roll{0}, chem{0}, math{0}, CS{0}, bio{0};
     std::cout << "Student Name: ";
 
     std::cin.ignore(); 
@@ -130,11 +136,33 @@ void createReportCard(){
     //This is used mainly with combinations of cin and getline.
     std::getline(std::cin, studentName);
     
+    LOG("Students info: ");
+    LOG("Roll Number, Chem, Math, CS, Bio:");
+    std::cin >> roll >> chem >> math >> CS >> bio;
+
     // .txt file is created to save students' information
+    std::fstream myFile;
+    //fstream allows ios::in | ios::out
+    //Open for input/output operations.
+    myFile.open("example.csv", std::ios::out | std::ios::app);
+    //ios::app (appends) 
     
-    
+    myFile << roll << ','<< studentName << ','<< chem << ',' << math << ',' << CS << ',' << bio << std::endl;
+    myFile.close();
 }
 
-void allStudentsReportCard(){
+void readAllStudentsReportCard(){
+    std::string line;
+    std::fstream myFile("example.csv");
+    if(myFile.is_open()){
+        while (std::getline(myFile,line))
+        {
+            std::cout << line << "\n";
+        }
+        myFile.close();
+    }
+}
 
+void modifyReportCard(){
+    
 }
